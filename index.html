@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Weather Now</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="dstAlert" class="dst-alert">
+        ⚠️ Time may not include daylight saving adjustments
+        <span id="closeAlert" class="close-btn">&times;</span>
+      </div>
+      <div class="app">
+        <div class="row">
+          <div class="currentTemp"><span id="currentTemp">0</span> °</div>
+          <div class="locAndTime">
+            <div class="currentLocation" id="currentLocation">N/A</div>
+            <div class="country" id="country">N/A</div>
+
+            <div id="currentDate">1 , sep , 2006</div>
+          </div>
+          <img class="CurrentWeatherIcon" id="CurrentWeatherIcon" src="" />
+        </div>
+      </div>
+      <div class="sidebar scroll">
+        <div class="search">
+          <input
+            type="text"
+            id="locationInput"
+            placeholder="Enter Location ..."
+          />
+          <div class="searchResults scroll" id="searchResults"></div>
+        </div>
+        <p class="normalText">Weather Details ...</p>
+        <h3 id="CurrentWeatherState">N/A</h3>
+        <div class="weatherInfo">
+          <div class="info">
+            <div class="row">
+              <p class="infoText">Temp max</p>
+              <p id="maxTemp">0°C</p>
+            </div>
+            <i class="fas fa-thermometer-full" data-color="#DFA1A1"></i>
+          </div>
+
+          <div class="info">
+            <div class="row">
+              <p class="infoText">Temp min</p>
+              <p id="minTemp">0°C</p>
+            </div>
+            <i class="fas fa-thermometer-empty" data-color="#6D97CA"></i>
+          </div>
+
+          <div class="info">
+            <div class="row">
+              <p class="infoText">Avg Humidity</p>
+              <p id="humidity">0%</p>
+            </div>
+            <i class="fas fa-tint" data-color="#00BFFF"></i>
+          </div>
+          <div class="info">
+            <div class="row">
+              <p class="infoText">Clouds</p>
+              <p id="clouds">0%</p>
+            </div>
+            <i class="fas fa-cloud" data-color="#B0C4DE"></i>
+          </div>
+
+          <div class="info">
+            <div class="row">
+              <p class="infoText">Wind</p>
+              <p id="wind">0 km/h</p>
+            </div>
+            <i class="fas fa-wind" data-color="#A9A9A9"></i>
+          </div>
+        </div>
+        <div class="sunContainer">
+          <div class="sunCard">
+            <i class="fas fa-sun"></i>
+            <p class="infoText">Sunrise</p>
+            <p id="sunrise">00:00</p>
+          </div>
+
+          <div class="sunCard">
+            <i class="fas fa-moon"></i>
+            <p class="infoText">Sunset</p>
+            <p id="sunset">00:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
