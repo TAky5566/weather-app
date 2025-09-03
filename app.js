@@ -1,4 +1,4 @@
-import { fetchSearchData, fetchWeatherData } from "./apiFetch.js";
+import { fetchSearchData, fetchWeatherData, fetchSunInfo } from "./apiFetch.js";
 let searchFeild = document.getElementById("locationInput");
 let searchView = document.getElementById("searchResults");
 
@@ -7,13 +7,32 @@ document.querySelectorAll(".info i").forEach((icon) => {
   if (color) icon.style.color = color;
 });
 
-searchFeild.addEventListener("input", async () => {
-  let query = searchFeild.value;
-  /* No Empty Query */
-  if (query === "") {
-    return;
-  }
+searchFeild.addEventListener(
+  "input",
+  debounce(() => {
+    let query = searchFeild.value.trim();
+    /* No Empty Query */
+    if (query.trim() === "") {
+      return;
+    }
+    renderSearch(query);
+  }, 500)
+);
 
+/*
+
+*/
+function debounce(func, time) {
+  let timeoutId = null;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, time);
+  };
+}
+
+async function renderSearch(query) {
   let response = await fetchSearchData(query);
 
   if (response.length === 0) {
@@ -28,86 +47,115 @@ searchFeild.addEventListener("input", async () => {
       let result = document.createElement("div");
       console.log(element);
       result.innerHTML = `
-      <p class="result" data-id=${element.lat},${element.lon}>${element.name} | ${element.country}</p>
+      <p class="result" data-lat="${element.lat}" data-lon="${element.lon}">${element.name} | ${element.country}</p>
       `;
       /* add event listner to make this location weather details appear */
       result.addEventListener("click", (e) => {
-        displayData(e.target.dataset.id);
+        displayData(e.target.dataset.lon , e.target.dataset.lat);
       });
       searchView.append(result);
     });
   }
-  /*
-      country: "Egypt" 
-    id: 680958
-    lat: 30.47
-    lon: 31.09
-    name: "Abshish"
-    region: "Al Minufiyah"
-          */
-});
-
-async function displayData(query) {
-  let response = await fetchWeatherData(query);
-  console.log(response);
-
-  let temperature = document.getElementById("currentTemp");
-  let description = document.getElementById("CurrentWeatherState");
-  let windSpeed = document.getElementById("wind");
-  let cloud = document.getElementById("clouds");
-  let humidity = document.getElementById("humidity");
-  let minTemp = document.getElementById("minTemp");
-  let maxTemp = document.getElementById("maxTemp");
-  let sunrise = document.getElementById("sunrise");
-  let sunset = document.getElementById("sunset");
-  let country = document.getElementById("country");
-  let currentDate = document.getElementById("currentDate");
-  let CurrentWeatherIcon = document.getElementById("CurrentWeatherIcon");
-  [
-    temperature.innerText,
-    description.innerText,
-    windSpeed.innerText,
-    humidity.innerText,
-    cloud.innerText,
-    maxTemp.innerText,
-    minTemp.innerText,
-    currentLocation.innerText,
-    sunrise.innerText,
-    sunset.innerText,
-    country.innerText,
-    currentDate.innerText,
-    CurrentWeatherIcon.src,
-  ] = [
-    response.current.temp_c,
-    response.current.condition.text,
-    response.current.wind_kph + " km/h",
-    response.forecast.forecastday[0].day.avghumidity + " %",
-    response.forecast.forecastday[0].day.maxwind_kph + " %",
-    response.forecast.forecastday[0].day.maxtemp_c + " °C",
-    response.forecast.forecastday[0].day.mintemp_c + " °C",
-    response.location.name,
-    response.forecast.forecastday[0].astro.sunrise,
-    response.forecast.forecastday[0].astro.sunset,
-    response.location.country,
-    formatDateTime(response.location.localtime, response.location.tz_id),
-        response.forecast.forecastday[0].day.condition.icon,
-
-  ];
 }
-const DateTime = luxon.DateTime;
+
+async function displayData(long ,latt) {
+  let response = await fetchWeatherData(long ,latt);
+  const {
+    current: {
+      temp_c,
+      condition: { text, icon },
+      cloud,
+    },
+    forecast: {
+      forecastday: [
+        {
+          day: { avghumidity, maxwind_kph, maxtemp_c, mintemp_c },
+        },
+      ],
+    },
+    location: { name, country, localtime, tz_id, },
+  } = response;
+
+  let sunInfo = await fetchSunInfo(long , latt);
+  const {
+    daily: { sunrise, sunset },
+  } = sunInfo;
+
+  updateWeatherInfo({
+    temp_c,
+    text,
+    icon,
+    cloud,
+    avghumidity,
+    maxwind_kph,
+    maxtemp_c,
+    mintemp_c,
+    name,
+    country,
+    localtime,
+    tz_id,
+    sunrise: sunrise[0],
+    sunset: sunset[0],
+  });
+}
+
+function updateWeatherInfo(data) {
+  const {
+    temp_c,
+    text,
+    icon,
+    cloud,
+    avghumidity,
+    maxwind_kph,
+    maxtemp_c,
+    mintemp_c,
+    name,
+    country,
+    localtime,
+    tz_id,
+    sunrise,
+    sunset,
+  } = data;
+
+  document.getElementById("currentTemp").innerText = temp_c;
+  document.getElementById("CurrentWeatherState").innerText = text;
+  document.getElementById("humidity").innerText = `${avghumidity} %`;
+  document.getElementById("clouds").innerText = `${cloud} %`;
+  document.getElementById("maxTemp").innerText = `${maxtemp_c} °C`;
+  document.getElementById("minTemp").innerText = `${mintemp_c} °C`;
+  document.getElementById("currentLocation").innerText = name;
+  document.getElementById("country").innerText = country;
+  document.getElementById("currentDate").innerText = formatDateTime(
+    localtime,
+    tz_id
+  );
+  document.getElementById("sunrise").innerText = setTimeZone(sunrise, tz_id);
+  document.getElementById("sunset").innerText = setTimeZone(sunset, tz_id);
+  document.getElementById("CurrentWeatherIcon").src = `https:${icon}`;
+  document.getElementById("wind").innerText = `${maxwind_kph}`;
+}
 
 /*luxon library */
 function formatDateTime(dateString, tz) {
-  return DateTime.fromSQL(dateString, { zone: tz }).toFormat(
+  return luxon.DateTime.fromSQL(dateString, { zone: tz }).toFormat(
     "HH:mm - EEEE, d LLL ‘yy"
   );
 }
 
-
+function setTimeZone(time, timezone) {
+  const Local = luxon.DateTime.fromISO(time, { zone: "UTC" })
+    .setZone(timezone)
+    .toFormat("HH:mm");
+  return Local;
+}
 
 const alertDiv = document.getElementById("dstAlert");
 const closeBtn = document.getElementById("closeAlert");
-
+window.onload=()=>{
+  if(!localStorage.getItem("AlertCase"))
+    alertDiv.style.display = "block";
+}
 closeBtn.addEventListener("click", () => {
   alertDiv.style.display = "none";
+  localStorage.setItem("AlertCase",1)
 });
