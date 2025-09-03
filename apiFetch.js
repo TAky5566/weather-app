@@ -9,7 +9,7 @@ async function fetchSearchData(query) {
 
   try {
     let result = await fetch(
-      `http://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${query}`,
+      `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${query}`,
       { signal }
     );
     return result.json();
@@ -31,7 +31,7 @@ async function fetchWeatherData(lon, lat) {
 
   try {
     let result = fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=5&aqi=no&alerts=no`,
+      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=5&aqi=no&alerts=no`,
       { signal }
     );
     return (await result).json();
