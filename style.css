@@ -51,9 +51,12 @@ body {
   gap: 10px;
 }
 
-.currentTemp {
+.app h1 {
   font-size: 100px;
-  display: flex;
+}
+.currentWeatherIcon{
+  width: 50px;
+  
 }
 .currentLocation {
   font-size: 29px;
@@ -67,9 +70,7 @@ body {
   font-size: 18px;
   color: #fff;
 }
-.date {
-  display: flex;
-}
+
 
 .sidebar {
   min-width: 400px;
@@ -223,12 +224,8 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.sunCard p:last-child {
-  font-size: 18px;
-  font-weight: 500;
-}
 
-.sunCard p:last-child {
+.sunCard p{
   font-size: 18px;
   font-weight: 500;
 }
