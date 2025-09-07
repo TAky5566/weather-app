@@ -40,24 +40,5 @@ export async function fetchWeatherData(lon, lat) {
   }
   return { length: 0 };
 }
-let sunInfoController = null;
-
-export async function fetchSunInfo(lon, lat) {
-  if (sunInfoController) sunInfoController.abort();
-  sunInfoController = new AbortController();
-  const signal = sunInfoController.signal;
-
-  try {
-    let result = fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=sunrise,sunset&forecast_days=1`,
-      { signal }
-    );
-
-    return (await result).json();
-  } catch (err) {
-    console.log(err);
-  }
-  return { length: 0 };
-}
 
 /********************/

@@ -2,12 +2,11 @@ import {
   formatDateTime,
   handleSearchClick,
   FetchAndSetUpData,
-  formatTimeInZone,
   cachedFetchSearch,
 } from "./utils.js";
 import { fetchSearchData } from "./api.js";
 let searchView = document.getElementById("searchResults");
-
+let container = document.querySelector(".container")
 const alertDiv = document.getElementById("dstAlert");
 const closeBtn = document.getElementById("closeAlert");
 window.onload = () => {
@@ -34,11 +33,14 @@ export async function RenderWeatherInfo(data) {
     tz_id,
     sunrise,
     sunset,
+    background
   } = data;
 
-  document.getElementById("currentTemp").innerText = Math.round(temp_c) + "°C";
+  document.getElementById("currentTemp").innerText = Math.round(temp_c) + "°";
   document.getElementById("CurrentWeatherState").innerText = text;
-  document.getElementById("humidity").innerText = `${Math.round(avghumidity)} %`;
+  document.getElementById("humidity").innerText = `${Math.round(
+    avghumidity
+  )} %`;
   document.getElementById("clouds").innerText = `${cloud} %`;
   document.getElementById("maxTemp").innerText = `${Math.round(maxtemp_c)} °C`;
   document.getElementById("minTemp").innerText = `${Math.round(mintemp_c)} °C`;
@@ -47,12 +49,13 @@ export async function RenderWeatherInfo(data) {
     localtime,
     tz_id
   );
-  document.getElementById("sunrise").innerText = formatTimeInZone(
-    sunrise,
-    tz_id
-  );
-  document.getElementById("sunset").innerText = formatTimeInZone(sunset, tz_id);
-  document.getElementById("CurrentWeatherIcon").src = `https:${icon}`;
+  document.getElementById("sunrise").innerText = sunrise;
+  document.getElementById("sunset").innerText = sunset;
+  let CurrentWeatherIcon= document.getElementById("CurrentWeatherIcon")
+  
+  CurrentWeatherIcon.src = icon.link;
+  CurrentWeatherIcon.style.filter=`drop-shadow(2px 4px 6px ${icon.color}`;
+container.style.backgroundImage=`url(img/${background})`
   document.getElementById("wind").innerText = `${Math.round(maxwind_kph)} km/h`;
 }
 

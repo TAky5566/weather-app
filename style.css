@@ -36,7 +36,7 @@ body {
   display: flex;
   height: 100vh;
   justify-content: space-between;
-  background: url(clear.jpg);
+  background: url(img/clear-day.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -52,11 +52,15 @@ body {
 }
 
 .app h1 {
-  font-size: 100px;
+  font-size: 90px;
 }
-.currentWeatherIcon{
-  width: 50px;
-  
+.app .temp {
+  display: flex;
+  align-items: center;
+  font-size: 40px;
+}
+.currentWeatherIcon {
+  width: 70px;
 }
 .currentLocation {
   font-size: 29px;
@@ -70,7 +74,6 @@ body {
   font-size: 18px;
   color: #fff;
 }
-
 
 .sidebar {
   min-width: 400px;
@@ -158,6 +161,9 @@ body {
 .info:hover {
   transform: translateX(5px);
 }
+.info .icon {
+  width: 30px;
+}
 .weatherInfo {
   display: flex;
   flex-direction: column;
@@ -166,11 +172,13 @@ body {
   padding-bottom: 25px;
   border-bottom: 1px solid #fff;
 }
-.normalText , h3 {
+.normalText,
+h3 {
   margin: 25px 0;
   font-size: 18px;
   font-weight: 400;
 }
+
 /*****************/
 
 .sunContainer {
@@ -180,13 +188,16 @@ body {
 }
 
 .sunCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex: 1;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.12),
     rgba(255, 255, 255, 0.04)
   );
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   text-align: center;
   color: #fff;
@@ -202,30 +213,12 @@ body {
     rgba(255, 255, 255, 0.06)
   );
 }
-
-.sunCard i {
-  font-size: 24px;
-  margin-bottom: 10px;
+.sunCard .icon {
+  height: 50px;
   display: block;
 }
 
-.sunCard:first-child i {
-  background: linear-gradient(45deg, #ffd700, #ffa500);
-  background-clip: text;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.sunCard:last-child i {
-  background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-
-.sunCard p{
+.sunCard p {
   font-size: 18px;
   font-weight: 500;
 }

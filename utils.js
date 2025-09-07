@@ -1,5 +1,6 @@
-import { fetchWeatherData, fetchSunInfo } from "./api.js";
+import { fetchWeatherData } from "./api.js";
 import { RenderWeatherInfo } from "./ui.js";
+import { getWeatherStyle } from "./condition.js";
 
 export function debounce(func, time) {
   let timeoutId = null;
@@ -36,67 +37,38 @@ export function formatDateTime(dateString, tz) {
   );
 }
 
-export function formatTimeInZone(time, timezone) {
-  const Local = luxon.DateTime.fromISO(time, { zone: "UTC" })
-    .setZone(timezone)
-    .toFormat("HH:mm");
-  return Local;
-}
-
-async function FetchData(long, latt) {
-  let weatherData = await cachedFetchSearch(
+export async function FetchAndSetUpData(long, latt) {
+  let data = await cachedFetchSearch(
     `FetchWeather_${long},${latt}`,
     fetchWeatherData,
     5,
     long,
     latt
   );
-  let sunInfo = await cachedFetchSearch(
-    `FetchSun_${long},${latt}`,
-    fetchSunInfo,
-    24 * 60,
-    long,
-    latt
-  );
-
-  return {
-    weatherResponse: weatherData,
-    sunResponse: sunInfo,
-  };
-}
-
-export async function FetchAndSetUpData(long, latt) {
-  const data = await FetchData(long, latt);
-  
+  console.log(data);
   const {
-    weatherResponse: {
-      current: {
-        temp_c,
-        condition: { text, icon },
-        cloud,
-      },
-      forecast: {
-        forecastday: [
-          {
-            day: { avghumidity, maxwind_kph, maxtemp_c, mintemp_c },
-          },
-        ],
-      },
-      location: { name, country, localtime, tz_id },
-    },
+    current: {
+      temp_c,
 
-    sunResponse: {
-      daily: {
-        sunrise: [SunRise],
-        sunset: [SunSet],
-      },
+      is_day,
+      condition: { text, code },
+      cloud,
     },
+    forecast: {
+      forecastday: [
+        {
+          astro: { sunrise, sunset },
+          day: { avghumidity, maxwind_kph, maxtemp_c, mintemp_c },
+        },
+      ],
+    },
+    location: { name, country, localtime, tz_id },
   } = data;
-
+  let {icon,color,background}=getWeatherStyle(code, is_day)
   return {
     temp_c,
     text,
-    icon,
+    icon: {link:"./icons/" +icon + ".svg",color},
     cloud,
     avghumidity,
     maxwind_kph,
@@ -106,8 +78,9 @@ export async function FetchAndSetUpData(long, latt) {
     country,
     localtime,
     tz_id,
-    sunrise: SunRise,
-    sunset: SunSet,
+    sunrise: sunrise,
+    sunset: sunset,
+    background:background
   };
 }
 

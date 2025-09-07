@@ -3,10 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
     <link rel="stylesheet" href="style.css" />
     <title>Weather Now</title>
   </head>
@@ -19,8 +15,15 @@
 
       <div class="app">
         <div class="row currentTemp">
+          <div class="temp">
           <h1 id="currentTemp">25°</h1>
-          <img id="CurrentWeatherIcon" class="currentWeatherIcon" src=""/>
+          C
+          </div>
+          <img
+            id="CurrentWeatherIcon"
+            class="currentWeatherIcon"
+            src="icons/day-clear.svg"
+          />
         </div>
         <div class="locAndTime">
           <p class="currentLocation" id="currentLocation">Cairo, Egypt</p>
@@ -45,7 +48,7 @@
               <p class="infoText">Temp max</p>
               <p id="maxTemp">0°C</p>
             </div>
-            <i class="fas fa-thermometer-full" data-color="#DFA1A1"></i>
+            <img class="icon"src="./icons/temp-max.svg" alt="" />
           </div>
 
           <div class="info">
@@ -53,7 +56,7 @@
               <p class="infoText">Temp min</p>
               <p id="minTemp">0°C</p>
             </div>
-            <i class="fas fa-thermometer-empty" data-color="#6D97CA"></i>
+            <img class="icon"src="./icons/temp-min.svg" alt="" />
           </div>
 
           <div class="info">
@@ -61,14 +64,14 @@
               <p class="infoText">Avg Humidity</p>
               <p id="humidity">0%</p>
             </div>
-            <i class="fas fa-tint" data-color="#00BFFF"></i>
+            <img class="icon"src="./icons/humidity.svg" alt="" />
           </div>
           <div class="info">
             <div class="row">
               <p class="infoText">Clouds</p>
               <p id="clouds">0%</p>
             </div>
-            <i class="fas fa-cloud" data-color="#B0C4DE"></i>
+            <img class="icon"src="./icons/clouds.svg" alt="" />
           </div>
 
           <div class="info">
@@ -76,18 +79,18 @@
               <p class="infoText">Max Wind Speed</p>
               <p id="wind">0 km/h</p>
             </div>
-            <i class="fas fa-wind" data-color="#A9A9A9"></i>
+            <img class="icon"src="./icons/wind.svg" alt="" />
           </div>
         </div>
         <div class="sunContainer">
           <div class="sunCard">
-            <i class="fas fa-sun"></i>
+            <img class="icon"src="./icons/sunrise.svg" alt="" />
             <p class="infoText">Sunrise</p>
             <p id="sunrise">00:00</p>
           </div>
 
           <div class="sunCard">
-            <i class="fas fa-moon"></i>
+            <img class="icon"src="./icons/sunset.svg" alt="" />
             <p class="infoText">Sunset</p>
             <p id="sunset">00:00</p>
           </div>
